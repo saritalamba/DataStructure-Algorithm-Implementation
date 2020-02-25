@@ -1,0 +1,77 @@
+## Depth First Search Implementation
+
+
+import java.util.*;
+import java.util.LinkedList;
+public class DepthFirstSearch 
+{
+	int node;
+	
+	LinkedList<Integer> Graphbylist[];
+	
+	public static void main(String[] args)
+	{
+		int node=5;
+		boolean[] visitednode=new boolean[node];
+		DepthFirstSearch glist=new DepthFirstSearch(node);
+		glist.addList(glist,1,0);
+		glist.addList(glist,2,0);
+		glist.addList(glist,4,0);
+		glist.addList(glist,1,4);
+		glist.addList(glist,2,3);
+		glist.addList(glist,4,3);
+		glist.addList(glist,2,4);
+		glist.addList(glist,3,1);
+		glist.printGraph(glist);
+		System.out.println("Depth First Search traversal of above Graph");
+		glist.DFS(2,visitednode);
+	}
+	
+    DepthFirstSearch(int node)
+    {
+    	this.node=node;
+    	Graphbylist = new LinkedList[node];
+    	for(int i=0;i<node;i++)
+    	{
+    	   Graphbylist[i]=new LinkedList<>();
+    	}
+    }
+    
+    public void printGraph(DepthFirstSearch glist)
+    {
+    	System.out.println("Adjacency List representation of Graph");
+    	for(int i=0;i<glist.node;i++)
+    	{
+    		System.out.print("Adjacency list of vertex "+i+" ->");
+    		for(Integer value:glist.Graphbylist[i])
+    		{
+    			System.out.print(" "+value);
+    		}
+    		System.out.println();
+    	}
+    }
+    
+    public void DFS(int node,boolean visitednode[])
+    {
+    	
+    	visitednode[node]=true;
+    	System.out.print(node+" ");
+    	Iterator<Integer> it= Graphbylist[node].listIterator();
+    	while(it.hasNext())
+    	{
+    		int adj=it.next();
+    		if(!(visitednode[adj])) 
+    		{
+    			DFS(adj,visitednode);
+    		}
+    	}
+    	
+    }
+    
+    public void addList(DepthFirstSearch glist,int s,int d)
+    {
+    	glist.Graphbylist[s].add(d);
+    	glist.Graphbylist[d].add(s);
+    }
+    
+}
