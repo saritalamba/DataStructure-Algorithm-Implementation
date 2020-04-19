@@ -1,0 +1,117 @@
+## Kruskal's(minimum spanning tree) Algorithm implementation
+
+import java.util.PriorityQueue;
+import java.util.Comparator;
+import java.util.ArrayList;
+
+public class KruskalMinSpanning 
+{
+	static class Edge
+	{
+		int source;
+		int destination;
+		int weight;
+	
+	    public Edge(int source,int destination,int weight)
+	    {
+		    this.source=source;
+		    this.destination=destination;
+		    this.weight=weight;
+	    }
+	}
+	static class Graph
+	{
+		int node;
+		ArrayList<Edge> edges=new ArrayList<>();
+		
+		Graph(int node)
+		{
+			this.node=node;
+		}
+	
+	
+	    public void AddEdges(int s,int d,int w)
+	    {
+		    Edge e=new Edge(s,d,w);
+		    edges.add(e);	
+	    }
+	    
+	    public void Result(int [] parent)
+	    {
+	    	for(int i=0;i<node;i++)
+	    		parent[i]=i;
+	    }
+	    
+	    public void KruskalMSTree()
+	    {
+	    	int []parent=new int[node];
+	    	Result(parent);
+	    	ArrayList<Edge> MinSpanning=new ArrayList<>();
+	    	PriorityQueue<Edge> pque=new PriorityQueue<>(edges.size(),Comparator.comparingInt(o->o.weight));
+	    	for(int i=0;i<edges.size();i++)
+	    	{
+	    		pque.add(edges.get(i));
+	    	}
+	    	int index=0;
+	    	while(index<node-1)
+	    	{
+	    		Edge e=pque.remove();
+	    		int x = findCycle(parent,e.source);
+	    		int y = findCycle(parent,e.destination);
+	    		if(x==y)
+	    		{
+	    		}else {
+	    			MinSpanning.add(e);
+	    			index++;
+	    			Union(parent, x, y);
+	    		}
+	    	}
+	    	System.out.println("Minimum Spanning Tree is: ");
+	    	Print(MinSpanning);
+	    }
+	    
+	    public int findCycle(int [] parent,int value)
+	    {
+	    	if(parent[value]!=value)
+                return findCycle(parent, parent[value]);;
+            return value;
+	    }
+	    
+	    public void Union(int [] parent,int x,int y)
+	    {
+	    	int x_ex=findCycle(parent,x);
+	    	int y_ex=findCycle(parent,y);
+	    	parent[y_ex]=x_ex;
+	    }
+	    
+	    public void Print(ArrayList<Edge> e)
+	    {
+	    	for(int i=0;i<edges.size();i++)
+	    	{
+	    		Edge v=e.get(i);
+	    		System.out.println("Edge"+i+" Source Node: "+v.source+" - Destination Node"+v.destination+" Weight "+v.weight);	
+	    	}	
+	    }  
+	 }
+	public static void main(String[] args) {
+        int vertex = 6;
+       Graph graph = new Graph (vertex);
+        graph.AddEdges(0, 1, 4);
+        graph.AddEdges(0, 2, 3);
+        graph.AddEdges(1, 2, 1);
+        graph.AddEdges(1, 3, 2);
+        graph.AddEdges(2, 3, 4);
+        graph.AddEdges(3, 4, 2);
+        graph.AddEdges(4, 5, 6);
+        graph.KruskalMSTree();
+}
+	
+}
+
+
+
+
+
+
+
+
