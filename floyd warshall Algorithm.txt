@@ -1,0 +1,46 @@
+## Floyd Warshall Algorithm implementation
+
+public class FloydWarshall
+{
+	static int node=4,n=99999;
+    public FloydWarshall(int node)
+    {
+        this.node=node;
+    }
+    public static void main(String[] args)
+    {
+    	int matrix[][]= {{0,3,n,5},{2,0,n,4},{n,1,0,n},{n,n,2,0}};
+    	FloydWarshall g=new FloydWarshall(node);
+    	System.out.println("Shotest path of all the nodes of the matrix");
+    	print(matrix);
+    	g.floydWarshall(matrix);
+    }
+    public static void floydWarshall(int mat[][]) 
+    {
+    	int d[][]=new int[node][node];
+    	for(int i=0;i<node;i++)
+    		for(int j=0;j<node;j++)
+    			d[i][j]=mat[i][j];
+    	for (int k = 0; k < node; k++) {
+    	      for (int i = 0; i < node; i++) {
+    	        for (int j = 0; j < node; j++) {
+    	          if (d[i][k] + d[k][j] < d[i][j])
+    	            d[i][j] = d[i][k] + d[k][j];
+    	        }
+    	      }
+    	    }
+    	print(d);
+    }
+    public static void print(int d[][])
+    {
+    	System.out.println("Matrix of shortest path of all the nodes");
+    	for(int i=0;i<node;i++) {
+    		for(int j=0;j<node;j++)
+    			if(d[i][j]==n) {
+    				System.out.print("INFI"+" ");
+    			}else {
+    				System.out.print(d[i][j]+" ");
+    			}
+    	System.out.println();
+    }}
+}
