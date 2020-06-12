@@ -1,0 +1,94 @@
+## Strongly connected components- Kosharaju Algorithm implementation
+
+import java.util.*;
+import java.util.LinkedList;
+
+class KosharajuAlgo {      //strongly connected components
+	private int V;
+	private LinkedList<Integer> adj[];
+	KosharajuAlgo(int v) {
+		V = v;
+		adj = new LinkedList[v];
+		for (int i = 0; i < v; ++i)
+			adj[i] = new LinkedList();
+	}
+	public static void main(String args[]) {
+		KosharajuAlgo g = new KosharajuAlgo(8);
+		g.addEdge(0, 1);
+		g.addEdge(1, 2);
+		g.addEdge(2, 3);
+		g.addEdge(2, 4);
+		g.addEdge(3, 0);
+		g.addEdge(4, 5);
+		g.addEdge(5, 6);
+		g.addEdge(6, 4);
+		g.addEdge(6, 7);
+
+		System.out.println("Strongly Connected Components for the given graph is");
+		g.printSCC();
+	}
+	void addEdge(int v, int w) {
+		adj[v].add(w);
+	}
+	void DFS(int v, boolean visitedVertices[]) {
+		visitedVertices[v] = true;
+		System.out.print(v + " ");
+		int n;
+
+		Iterator<Integer> i = adj[v].iterator();
+		while (i.hasNext()) {
+			n = i.next();
+			if (!visitedVertices[n])
+				DFS(n, visitedVertices);
+		}
+	}
+
+	KosharajuAlgo Reverse() {
+		KosharajuAlgo g = new KosharajuAlgo(V);
+		for (int v = 0; v < V; v++) {
+			Iterator<Integer> i = adj[v].listIterator();
+			while (i.hasNext())
+				g.adj[i.next()].add(v);
+		}
+		return g;
+	}
+
+	void fillOrder(int v, boolean visited[], Stack stack) {
+		visited[v] = true;
+
+		Iterator<Integer> i = adj[v].iterator();
+		while (i.hasNext()) 
+		{
+			int n = i.next();
+			if (!visited[n])
+				fillOrder(n, visited, stack);
+		}
+		stack.push(new Integer(v));
+	}
+	void printSCC() {
+		Stack stack = new Stack();
+
+		boolean visited[] = new boolean[V];
+		for (int i = 0; i < V; i++)
+			visited[i] = false;
+
+		for (int i = 0; i < V; i++)
+			if (visited[i] == false)
+				fillOrder(i, visited, stack);
+
+		KosharajuAlgo gr = Reverse();
+
+		for (int i = 0; i < V; i++)
+			visited[i] = false;
+
+		while (stack.empty() == false) {
+			int v = (int) stack.pop();
+
+			if (visited[v] == false) {
+				gr.DFS(v, visited);
+				System.out.println();
+			}
+		}
+	}
+}
+
